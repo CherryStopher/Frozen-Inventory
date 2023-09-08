@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from .db.database import Base, engine
-from .routers import item
+from .routers import product
 
 
 def create_tables():
@@ -9,4 +9,4 @@ def create_tables():
 create_tables()
 
 app = FastAPI()
-app.include_router(item.router)
+app.include_router(product.router)
