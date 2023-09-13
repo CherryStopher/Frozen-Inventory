@@ -1,8 +1,12 @@
+import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:admin@localhost:5433/lkcherrydb"
+load_dotenv()
+
+SQLALCHEMY_DATABASE_URL = f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASS')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
@@ -13,7 +17,7 @@ Base = declarative_base()
 
 # Return the DB Session
 def get_db():
-    db= SessionLocal()
+    db = SessionLocal()
     try:
         yield db
     finally:
