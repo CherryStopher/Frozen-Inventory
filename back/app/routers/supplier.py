@@ -3,15 +3,19 @@ import schemas
 from db.database import get_db
 from sqlalchemy.orm import Session
 from models import Supplier
+from fastapi import HTTPException
 
 
 router = APIRouter(prefix="/supplier", tags=["Suppliers"])
 
 
 @router.get("/")
-async def get_suppliers(db: Session = Depends(get_db)):
-    data = db.query(Supplier).all()
-    return data
+async def get_suppliers(db: Session = Depends(get_db)): 
+    try:
+        data = db.query(Supplier).all()
+        return data
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/")
