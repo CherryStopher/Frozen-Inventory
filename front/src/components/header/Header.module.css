@@ -1,0 +1,15 @@
+.headerContainer {
+    height: 10vh; 
+    display: flex;
+    padding: 16px 16px;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+.titleContainer {
+    display: flex;
+
+}
+.pageName {
+    padding: 10px;
+}
