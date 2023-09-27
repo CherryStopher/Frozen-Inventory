@@ -21,13 +21,13 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table(
         "clients",
-        sa.Column("id", sa.Integer, primary_key=True),
+        sa.Column("id", sa.Integer, primary_key=True, autoincrement=True),
         sa.Column("rut", sa.String(200), nullable=False),
         sa.Column("business_name", sa.String(200), nullable=False),
         sa.Column("nickname", sa.String(200), nullable=False),
         sa.Column("phone", sa.String(200), nullable=False),
         sa.Column("email", sa.String(200), nullable=False),
-        sa.Column("adress", sa.String(200), nullable=False),
+        sa.Column("address", sa.String(200), nullable=False),
         sa.Column("commune", sa.String(200), nullable=False),
     )
 
