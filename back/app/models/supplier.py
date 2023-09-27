@@ -13,8 +13,6 @@ class Supplier(Base):
     contact_name = Column(String(200), nullable=False)
     phone = Column(String(200), nullable=False)
     email = Column(String(200), nullable=False)
-    retirement_address = Column(String(200), nullable=False)
-    payment_method = Column(String(200), nullable=False)
 
     purchases = relationship("Purchase", back_populates="supplier")
     products = relationship("Product", back_populates="supplier")

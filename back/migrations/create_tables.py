@@ -40,9 +40,8 @@ def upgrade() -> None:
         sa.Column("contact_name", sa.String(200), nullable=False),
         sa.Column("phone", sa.String(200), nullable=False),
         sa.Column("email", sa.String(200), nullable=False),
-        sa.Column("adress", sa.String(200), nullable=False),
+        sa.Column("address", sa.String(200), nullable=False),
         sa.Column("commune", sa.String(200), nullable=False),
-        sa.Column("payment_method", sa.String(200), nullable=False),
     )
 
     op.create_table(
