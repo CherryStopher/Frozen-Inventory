@@ -1,5 +1,14 @@
 from fastapi import FastAPI
-from routers import product, supplier, sale, purchase, product_purchase, movement
+from routers import (
+    product,
+    supplier,
+    sale,
+    purchase,
+    product_purchase,
+    product_loss,
+    product_sale,
+    movement,
+)
 
 
 app = FastAPI()
@@ -8,4 +17,6 @@ app.include_router(supplier.router)
 app.include_router(sale.router)
 app.include_router(purchase.router)
 app.include_router(product_purchase.router)
+app.include_router(product_loss.router)
+app.include_router(product_sale.router)
 app.include_router(movement.router)
