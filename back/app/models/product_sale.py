@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy import Column, Integer, ForeignKey, Float
 from sqlalchemy.orm import relationship
 from db.database import Base
 
@@ -10,7 +10,7 @@ class ProductSale(Base):
     product_id = Column(Integer, ForeignKey("products.id"))
     sale_id = Column(Integer, ForeignKey("sales.id"))
     quantity = Column(Integer)
-    unit_price = Column(Integer)
+    unit_price = Column(Float)
 
     product = relationship("Product", back_populates="product_sales")
     sale = relationship("Sale", back_populates="product_sales")
