@@ -8,4 +8,4 @@ class Product(BaseModel):
     supplier_id: int
     measurement_unit: str
     measurement_unit_quantity: int
-    current_price: int
+    current_price: float
