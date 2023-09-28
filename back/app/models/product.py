@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, String
+from sqlalchemy import Column, Integer, ForeignKey, String, Float
 from sqlalchemy.orm import relationship
 from db.database import Base
 
@@ -13,7 +13,7 @@ class Product(Base):
     supplier_id = Column(Integer, ForeignKey("suppliers.id"))
     measurement_unit = Column(String(200))
     measurement_unit_quantity = Column(Integer)
-    base = Column(String(200))
+    current_price = Column(Float)
 
     supplier = relationship("Supplier", back_populates="products")
     movements = relationship("Movement", back_populates="product")

@@ -6,9 +6,7 @@ class Client(BaseModel):
     rut: str
     business_name: str
     nickname: str
-    contact_name: str
     phone: str
     email: str
-    adress: str
+    address: str
     commune: str
-    payment_method: str
