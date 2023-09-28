@@ -46,6 +46,27 @@ async def create_product(product: schemas.Product, db: Session = Depends(get_db)
         )
 
 
+@router.put("/{id}")
+async def update_product(
+    id: int, product_update: schemas.Product, db: Session = Depends(get_db)
+):
+    try:
+        updated_product = utils.update_data(
+            db, Product, id, product_update.model_dump(exclude_defaults=True)
+        )
+
+        if updated_product:
+            return updated_product
+        else:
+            raise HTTPException(
+                status_code=404, detail=f"Product with id {id} not found"
+            )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error to update the product: {str(e)}"
+        )
+
+
 @router.delete("/{id}")
 async def delete_product(id: int, db: Session = Depends(get_db)):
     try:
