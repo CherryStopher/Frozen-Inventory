@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
 import axios, { type Method } from 'axios'
 
+const apiUrl = process.env.REACT_APP_API_URL as string
+
 const useAxios = (
-  url: string,
+  query: string,
   method: Method,
   body: any
 ): [boolean, string | null, any] => {
   const [loading, setLoading] = useState<boolean>(false)
   const [data, setData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
+  const url = `${apiUrl}${query}`
 
   useEffect(() => {
     setLoading(true)
