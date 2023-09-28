@@ -9,7 +9,7 @@ from . import utils
 router = APIRouter(prefix="/purchase", tags=["Purchase"])
 
 
-@router.get("/")
+@router.get("/get_all")
 async def get_purchases(db: Session = Depends(get_db)):
     try:
         data = utils.get_all_data(Purchase, db)
@@ -18,7 +18,7 @@ async def get_purchases(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{id}")
+@router.get("/get/{id}")
 async def get_purchase_by_id(id: int, db: Session = Depends(get_db)):
     try:
         data = utils.get_data_by_id(Purchase, db, id)
@@ -27,7 +27,7 @@ async def get_purchase_by_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/")
+@router.post("/create")
 async def create_purchase(purchase: schemas.Purchase, db: Session = Depends(get_db)):
     try:
         purchase_data = Purchase(
@@ -43,7 +43,7 @@ async def create_purchase(purchase: schemas.Purchase, db: Session = Depends(get_
         )
 
 
-@router.put("/{id}")
+@router.put("/update/{id}")
 async def update_purchase(
     id: int, purchase_update: schemas.Purchase, db: Session = Depends(get_db)
 ):
@@ -64,7 +64,7 @@ async def update_purchase(
         )
 
 
-@router.delete("/{id}")
+@router.delete("/delete/{id}")
 async def delete_purchase(id: int, db: Session = Depends(get_db)):
     try:
         deleted_purchase = utils.delete_data(db, Purchase, id)

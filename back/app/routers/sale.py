@@ -9,7 +9,7 @@ from . import utils
 router = APIRouter(prefix="/sale", tags=["Sales"])
 
 
-@router.get("/")
+@router.get("/get_all")
 async def get_sales(db: Session = Depends(get_db)):
     try:
         data = utils.get_all_data(Sale, db)
@@ -18,7 +18,7 @@ async def get_sales(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{id}")
+@router.get("/get/{id}")
 async def get_sale_by_id(id: int, db: Session = Depends(get_db)):
     try:
         data = utils.get_data_by_id(Sale, db, id)
@@ -27,7 +27,7 @@ async def get_sale_by_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/")
+@router.post("/create")
 async def create_sale(sale: schemas.Sale, db: Session = Depends(get_db)):
     try:
         sale_data = Sale(
@@ -43,7 +43,7 @@ async def create_sale(sale: schemas.Sale, db: Session = Depends(get_db)):
         )
 
 
-@router.put("/{id}")
+@router.put("/update/{id}")
 async def update_sale(
     id: int, sale_update: schemas.Sale, db: Session = Depends(get_db)
 ):
@@ -62,7 +62,7 @@ async def update_sale(
         )
 
 
-@router.delete("/{id}")
+@router.delete("/delete/{id}")
 async def delete_sale(id: int, db: Session = Depends(get_db)):
     try:
         deleted_sale = utils.delete_data(db, Sale, id)

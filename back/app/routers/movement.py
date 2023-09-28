@@ -9,7 +9,7 @@ from . import utils
 router = APIRouter(prefix="/movement", tags=["Movements"])
 
 
-@router.get("/")
+@router.get("/get_all")
 async def get_movements(db: Session = Depends(get_db)):
     try:
         data = utils.get_all_data(Movement, db)
@@ -18,7 +18,7 @@ async def get_movements(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{id}")
+@router.get("/get/{id}")
 async def get_movement_by_id(id: int, db: Session = Depends(get_db)):
     try:
         data = utils.get_data_by_id(Movement, db, id)
@@ -27,7 +27,7 @@ async def get_movement_by_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/")
+@router.post("/create")
 async def create_movement(movement: schemas.Movement, db: Session = Depends(get_db)):
     try:
         movement_data = Movement(
@@ -48,7 +48,7 @@ async def create_movement(movement: schemas.Movement, db: Session = Depends(get_
         )
 
 
-@router.put("/{id}")
+@router.put("/update/{id}")
 async def update_movement(
     id: int, movement_update: schemas.Movement, db: Session = Depends(get_db)
 ):
@@ -69,7 +69,7 @@ async def update_movement(
         )
 
 
-@router.delete("/{id}")
+@router.delete("/delete/{id}")
 async def delete_movement(id: int, db: Session = Depends(get_db)):
     try:
         deleted_movement = utils.delete_data(db, Movement, id)

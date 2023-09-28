@@ -9,7 +9,7 @@ from . import utils
 router = APIRouter(prefix="/supplier", tags=["Suppliers"])
 
 
-@router.get("/")
+@router.get("/get_all")
 async def get_suppliers(db: Session = Depends(get_db)):
     try:
         data = utils.get_all_data(Supplier, db)
@@ -18,7 +18,7 @@ async def get_suppliers(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{id}")
+@router.get("/get/{id}")
 async def get_supplier_by_id(id: int, db: Session = Depends(get_db)):
     try:
         data = utils.get_data_by_id(Supplier, db, id)
@@ -27,7 +27,7 @@ async def get_supplier_by_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/")
+@router.post("/create")
 async def create_supplier(supplier: schemas.Supplier, db: Session = Depends(get_db)):
     try:
         supplier_data = Supplier(
@@ -46,7 +46,7 @@ async def create_supplier(supplier: schemas.Supplier, db: Session = Depends(get_
         )
 
 
-@router.put("/{id}")
+@router.put("/update/{id}")
 async def update_supplier(
     id: int, supplier_update: schemas.Supplier, db: Session = Depends(get_db)
 ):
@@ -66,7 +66,7 @@ async def update_supplier(
         )
 
 
-@router.delete("/{id}")
+@router.delete("/delete/{id}")
 async def delete_supplier(id: int, db: Session = Depends(get_db)):
     try:
         deleted_supplier = utils.delete_data(db, Supplier, id)

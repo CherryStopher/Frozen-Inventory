@@ -9,7 +9,7 @@ from . import utils
 router = APIRouter(prefix="/product", tags=["Products"])
 
 
-@router.get("/")
+@router.get("/get_all")
 async def get_products(db: Session = Depends(get_db)):
     try:
         data = utils.get_all_data(Product, db)
@@ -18,7 +18,7 @@ async def get_products(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/{id}")
+@router.get("/get/{id}")
 async def get_product_by_id(id: int, db: Session = Depends(get_db)):
     try:
         data = utils.get_data_by_id(Product, db, id)
@@ -27,7 +27,7 @@ async def get_product_by_id(id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/")
+@router.post("/create")
 async def create_product(product: schemas.Product, db: Session = Depends(get_db)):
     try:
         product_data = Product(
@@ -46,7 +46,7 @@ async def create_product(product: schemas.Product, db: Session = Depends(get_db)
         )
 
 
-@router.put("/{id}")
+@router.put("/update/{id}")
 async def update_product(
     id: int, product_update: schemas.Product, db: Session = Depends(get_db)
 ):
@@ -67,7 +67,7 @@ async def update_product(
         )
 
 
-@router.delete("/{id}")
+@router.delete("/delete/{id}")
 async def delete_product(id: int, db: Session = Depends(get_db)):
     try:
         deleted_product = utils.delete_data(db, Product, id)
