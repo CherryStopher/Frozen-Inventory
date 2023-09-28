@@ -28,6 +28,7 @@ def upgrade() -> None:
         sa.Column("category", sa.String(200), nullable=False),
         sa.Column("measurement_unit", sa.String(200), nullable=False),
         sa.Column("measurement_unit_quantity", sa.Integer, nullable=False),
+        sa.Column("current_price", sa.Integer, nullable=False),
     )
 
 

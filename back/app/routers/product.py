@@ -37,6 +37,7 @@ async def create_product(product: schemas.Product, db: Session = Depends(get_db)
             supplier_id=product.supplier_id,
             measurement_unit=product.measurement_unit,
             measurement_unit_quantity=product.measurement_unit_quantity,
+            current_price=product.current_price,
         )
         new_product = utils.create_data(db, product_data)
         return new_product

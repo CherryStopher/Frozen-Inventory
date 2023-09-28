@@ -13,6 +13,7 @@ class Product(Base):
     supplier_id = Column(Integer, ForeignKey("suppliers.id"))
     measurement_unit = Column(String(200))
     measurement_unit_quantity = Column(Integer)
+    current_price = Column(Integer)
 
     supplier = relationship("Supplier", back_populates="products")
     movements = relationship("Movement", back_populates="product")
