@@ -1,4 +1,6 @@
 
+Python 3.10.x
+
 To run migrations:
 ```
 alembic upgrade head
