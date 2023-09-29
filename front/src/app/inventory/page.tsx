@@ -135,11 +135,7 @@ const fuseOptions = {
 const InventoryPage = (): JSX.Element => {
   const [searchText, setSearchText] = useState<string>('')
 
-  // Get products data using useAxios
-  const [loading, error, data] = useAxios('/products', 'GET', null)
-  console.log('loading', loading)
-  console.log('error', error)
-  console.log('data', data)
+  const [loading, error, data] = useAxios('/product/get/1', 'GET', {})
 
   const fuse = useMemo(
     () => new Fuse(productsData, fuseOptions),

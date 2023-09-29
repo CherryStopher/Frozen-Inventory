@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios, { type Method } from 'axios'
 
-const apiUrl = process.env.REACT_APP_API_URL as string
+const apiUrl: string | undefined = process.env.NEXT_PUBLIC_API_URL
 
 const useAxios = (
   query: string,
