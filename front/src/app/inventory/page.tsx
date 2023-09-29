@@ -15,6 +15,7 @@ import { type Product } from '@interfaces/index'
 import Link from 'next/link'
 import styles from './page.module.css'
 import Fuse from 'fuse.js'
+import { useAxios } from '@hooks/useAxios'
 
 const tableSort: Sortable = {
   defaultValue: {
@@ -133,6 +134,9 @@ const fuseOptions = {
 
 const InventoryPage = (): JSX.Element => {
   const [searchText, setSearchText] = useState<string>('')
+
+  const [loading, error, data] = useAxios('/product/get/1', 'GET', {})
+
   const fuse = useMemo(
     () => new Fuse(productsData, fuseOptions),
     []

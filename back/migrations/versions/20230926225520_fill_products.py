@@ -20,7 +20,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 products = sa.table(
     "products",
-    sa.Column("id", sa.Integer, primary_key=True, autoincrement=True),
     sa.Column("name", sa.String(200), nullable=False),
     sa.Column("supplier_id", sa.Integer, sa.ForeignKey("suppliers.id")),
     sa.Column("barcode", sa.String(200), nullable=False),
@@ -33,6 +32,11 @@ products = sa.table(
 
 def upgrade() -> None:
     products_data = json.load(open("migrations/seeds/products.json"))
+    conn = op.get_bind()
+    suppliers = conn.execute(sa.text("SELECT id, business_name FROM suppliers")).fetchall()
+    suppliers_dict = {supplier.business_name: supplier.id for supplier in suppliers}
+    for product in products_data:
+        product["supplier_id"] = suppliers_dict[product["supplier"]]
     op.bulk_insert(products, products_data)
 
 
