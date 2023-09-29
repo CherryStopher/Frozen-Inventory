@@ -31,7 +31,7 @@ products = sa.table(
 
 
 def upgrade() -> None:
-    products_data = json.load(open("migrations/seeds/products.json"))
+    products_data = json.load(open("migrations/seeds/products.json", encoding='utf-8-sig'))
     conn = op.get_bind()
     suppliers = conn.execute(sa.text("SELECT id, business_name FROM suppliers")).fetchall()
     suppliers_dict = {supplier.business_name: supplier.id for supplier in suppliers}

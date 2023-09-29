@@ -30,7 +30,7 @@ suppliers = sa.table(
 
 
 def upgrade() -> None:
-    suppliers_data = json.load(open("migrations/seeds/suppliers.json"))
+    suppliers_data = json.load(open("migrations/seeds/suppliers.json", encoding='utf-8-sig'))
     op.bulk_insert(suppliers, suppliers_data)
 
 

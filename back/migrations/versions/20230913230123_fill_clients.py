@@ -32,7 +32,7 @@ clients = sa.table(
 
 
 def upgrade() -> None:
-    clients_data = json.load(open("migrations/seeds/clients.json"))
+    clients_data = json.load(open("migrations/seeds/clients.json", encoding='utf-8-sig'))
     op.bulk_insert(clients, clients_data)
 
 
