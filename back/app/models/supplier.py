@@ -8,8 +8,8 @@ class Supplier(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     fantasy_name = Column(String(200), nullable=False)
-    rut = Column(String(200), nullable=False)
     business_name = Column(String(200), nullable=False)
+    rut = Column(String(200), nullable=False)
     contact_name = Column(String(200), nullable=False)
     phone = Column(String(200), nullable=False)
     email = Column(String(200), nullable=False)

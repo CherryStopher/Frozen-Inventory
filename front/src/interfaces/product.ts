@@ -5,7 +5,7 @@ export interface Product {
   available: number
   supplier: string
   category: string
-  avgCost: number
+  averageCost: number
   suggestedPrice: number
-  salePrice: number
+  currentPrice: number
 }

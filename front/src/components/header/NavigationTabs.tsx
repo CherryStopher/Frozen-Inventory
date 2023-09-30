@@ -5,12 +5,13 @@ import { useTheme } from '@mui/material/styles'
 import {
   type AppRoute,
   AppRouteNames,
-  routeTabs
+  routeTabs,
+  groupedAppRouteTabs
 } from '@interfaces/routes'
 import Link from 'next/link'
 
 interface TabBarProps {
-  currentPath?: AppRoute
+  currentPath: AppRoute
 }
 
 interface LinkTabProps {
@@ -32,7 +33,7 @@ export const NavigationTabs = ({ currentPath }: TabBarProps): JSX.Element => {
   const theme = useTheme()
   return (
     <Tabs
-    value={currentPath}
+    value={groupedAppRouteTabs[currentPath]}
     textColor='inherit'
     TabIndicatorProps={{
       style: { backgroundColor: theme.colors.white }

@@ -6,13 +6,13 @@ import schemas
 from . import utils
 
 
-router = APIRouter(prefix="/supplier", tags=["Suppliers"])
+router = APIRouter(prefix="/suppliers", tags=["Suppliers"])
 
 
 @router.get("/get_all")
 async def get_suppliers(db: Session = Depends(get_db)):
     try:
-        data = utils.get_all_data(Supplier, db)
+        data = db.query(Supplier).all()
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -21,7 +21,7 @@ async def get_suppliers(db: Session = Depends(get_db)):
 @router.get("/get/{id}")
 async def get_supplier_by_id(id: int, db: Session = Depends(get_db)):
     try:
-        data = utils.get_data_by_id(Supplier, db, id)
+        data = db.query(Supplier).filter(Supplier.id == id).first()
         return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

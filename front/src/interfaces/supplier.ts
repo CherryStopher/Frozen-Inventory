@@ -1,10 +1,9 @@
 export interface Supplier {
   id: number
-  name: string
+  fantasyName: string
+  businessName: string
+  rut: string
   contactName: string
-  category: string
   phone: string
   email: string
-  address: string
-  commune: string
 }

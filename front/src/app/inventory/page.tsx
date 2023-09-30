@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Box, Paper } from '@mui/material'
 import {
   CustomTable,
@@ -47,7 +47,7 @@ const inventoryCols: CustomTableColumn[] = [
   },
   {
     title: 'Costo promedio',
-    attr: 'avgCost'
+    attr: 'averageCost'
   },
   {
     title: 'Precio sugerido',
@@ -55,76 +55,7 @@ const inventoryCols: CustomTableColumn[] = [
   },
   {
     title: 'Precio de venta',
-    attr: 'salePrice'
-  }
-]
-
-const productsData: Product[] = [
-  {
-    id: 1,
-    name: 'Choclo grano',
-    unit: '500g',
-    available: 10,
-    avgCost: 890,
-    suggestedPrice: 1000,
-    salePrice: 1100,
-    supplier: 'Minuto Verde',
-    category: 'Congelados'
-  },
-  {
-    id: 2,
-    name: 'Choclo grano',
-    unit: '500g',
-    available: 10,
-    avgCost: 890,
-    suggestedPrice: 1000,
-    salePrice: 1100,
-    supplier: 'Minuto Verde',
-    category: 'Congelados'
-  },
-  {
-    id: 3,
-    name: 'Choclo grano',
-    unit: '500g',
-    available: 10,
-    avgCost: 890,
-    suggestedPrice: 1000,
-    salePrice: 1100,
-    supplier: 'Minuto Verde',
-    category: 'Congelados'
-  },
-  {
-    id: 4,
-    name: 'Choclo grano',
-    unit: '500g',
-    available: 10,
-    avgCost: 890,
-    suggestedPrice: 1000,
-    salePrice: 1100,
-    supplier: 'Minuto Verde',
-    category: 'Congelados'
-  },
-  {
-    id: 5,
-    name: 'Choclo grano',
-    unit: '500g',
-    available: 10,
-    avgCost: 890,
-    suggestedPrice: 1000,
-    salePrice: 1100,
-    supplier: 'Minuto Verde',
-    category: 'Congelados'
-  },
-  {
-    id: 6,
-    name: 'Choclo grano',
-    unit: '500g',
-    available: 10,
-    avgCost: 890,
-    suggestedPrice: 1000,
-    salePrice: 1100,
-    supplier: 'Minuto Verde',
-    category: 'Congelados'
+    attr: 'currentPrice'
   }
 ]
 
@@ -134,21 +65,21 @@ const fuseOptions = {
 
 const InventoryPage = (): JSX.Element => {
   const [searchText, setSearchText] = useState<string>('')
-
-  const [loading, error, data] = useAxios('/product/get/1', 'GET', {})
-
-  const fuse = useMemo(
-    () => new Fuse(productsData, fuseOptions),
-    []
-  )
   const [openModal, setOpenModal] = useState(false)
-
-  const filteredProducts: Product[] = useMemo(() => {
-    if (searchText.length < 2) {
-      return productsData
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [loading, error, productsData] = useAxios<Product[]>('/products/inventory', 'GET', {})
+  
+  useEffect(() => {
+    if (productsData) {
+      if (searchText.length < 2) {
+        setFilteredProducts(productsData);
+      } else {
+        const fuse = new Fuse(productsData, fuseOptions);
+        const results = fuse.search(searchText).map((result) => result.item);
+        setFilteredProducts(results);
+      }
     }
-    return fuse.search(searchText).map((el) => el.item)
-  }, [searchText, fuse])
+  }, [searchText, productsData]);
 
   const tableProducts: CustomTableRow[] = useMemo(() => {
     return filteredProducts.map((product) => ({
@@ -165,17 +96,17 @@ const InventoryPage = (): JSX.Element => {
           type: CustomTableRowDataType.TEXT,
           text: product.available.toString()
         },
-        avgCost: {
+        averageCost: {
           type: CustomTableRowDataType.TEXT,
-          text: `$ ${product.avgCost}`
+          text: `$ ${product.averageCost}`
         },
         suggestedPrice: {
           type: CustomTableRowDataType.TEXT,
           text: `$ ${product.suggestedPrice}`
         },
-        salePrice: {
+        currentPrice: {
           type: CustomTableRowDataType.TEXT,
-          text: `$ ${product.salePrice}`
+          text: `$ ${product.currentPrice}`
         },
         supplier: {
           type: CustomTableRowDataType.TEXT,

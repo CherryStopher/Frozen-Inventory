@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Box, Paper } from '@mui/material'
 import {
   CustomTable,
@@ -15,6 +15,7 @@ import { AddClientModal } from '@components/clients'
 import styles from './page.module.css'
 import Fuse from 'fuse.js'
 import { useTheme } from '@mui/material/styles'
+import { useAxios } from '@hooks/useAxios'
 
 const tableSort: Sortable = {
   defaultValue: {
@@ -50,34 +51,29 @@ const inventoryCols: CustomTableColumn[] = [
   }
 ]
 
-const clientsData: Client[] = [
-  {
-    id: 1,
-    name: 'Angélica de Los Ángeles Pérez',
-    nickname: 'Doña Angélica La Estrella',
-    phone: '+569 1234 5678',
-    email: 'angelica123@gmail.com',
-    commune: 'La Estrella',
-    address: 'Av. Cachapoal #164'
-  }
-]
-
 const fuseOptions = {
   keys: ['name', 'nickname, commune']
 }
 
 const ClientsPage = (): JSX.Element => {
   const theme = useTheme()
-  const [openModal, setOpenModal] = useState(false)
-
   const [searchText, setSearchText] = useState<string>('')
-  const fuse = useMemo(() => new Fuse(clientsData, fuseOptions), [])
-  const filteredClients: Client[] = useMemo(() => {
-    if (searchText.length < 2) {
-      return clientsData
+  const [openModal, setOpenModal] = useState(false)
+  const [filteredClients, setFilteredClients] = useState<Client[]>([])
+  const [loading, error, clientData] = useAxios<Client[]>('/clients/get_all', 'GET', {})
+
+  useEffect(() => {
+    if (clientData) {
+      if (searchText.length < 2) {
+        setFilteredClients(clientData);
+      } else {
+        const fuse = new Fuse(clientData, fuseOptions);
+        const results = fuse.search(searchText).map((result) => result.item);
+        setFilteredClients(results);
+      }
     }
-    return fuse.search(searchText).map((el) => el.item)
-  }, [searchText, fuse])
+  }, [searchText, clientData]);
+
   const tableClients: CustomTableRow[] = useMemo(() => {
     return filteredClients.map((clients) => ({
       data: {

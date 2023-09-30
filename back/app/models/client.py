@@ -7,9 +7,8 @@ class Client(Base):
     __tablename__ = "clients"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    fantasy_name = Column(String(200))
+    name = Column(String(200))
     rut = Column(String(200))
-    business_name = Column(String(200))
     nickname = Column(String(200))
     phone = Column(String(200))
     email = Column(String(200))

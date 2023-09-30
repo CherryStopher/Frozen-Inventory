@@ -1,5 +1,5 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Box, Paper } from '@mui/material'
 import {
   CustomTable,
@@ -14,27 +14,33 @@ import { AddSupplierModal } from '@components/suppliers'
 import Fuse from 'fuse.js'
 import { type Supplier } from '@interfaces/index'
 import { useTheme } from '@mui/material/styles'
+import { useAxios } from '@hooks/useAxios'
 import styles from './page.module.css'
+
 
 const tableSort: Sortable = {
   defaultValue: {
-    column: 'name',
+    column: 'fantasyName',
     order: 'desc'
   }
 }
 
-const inventoryCols: CustomTableColumn[] = [
+const suppliersCols: CustomTableColumn[] = [
   {
     title: 'Proveedor',
-    attr: 'name'
+    attr: 'fantasyName'
+  },
+  {
+    title: 'Razón Social',
+    attr: 'businessName'
   },
   {
     title: 'Nombre contacto',
     attr: 'contactName'
   },
   {
-    title: 'Categoría',
-    attr: 'category'
+    title: 'Proveedor',
+    attr: 'rut'
   },
   {
     title: 'Teléfono',
@@ -44,23 +50,6 @@ const inventoryCols: CustomTableColumn[] = [
     title: 'Correo',
     attr: 'email'
   },
-  {
-    title: 'Dirección',
-    attr: 'address'
-  }
-]
-
-const suppliersData: Supplier[] = [
-  {
-    id: 1,
-    name: 'Minuto Verde',
-    contactName: 'Armando Esteban Quito',
-    category: 'Congelados',
-    phone: '+569 1234 5678',
-    email: 'minutoverde@gmail.com',
-    address: 'Av. Cachapoal #164',
-    commune: 'Rancagua'
-  }
 ]
 
 const fuseOptions = {
@@ -69,33 +58,41 @@ const fuseOptions = {
 
 const SuppliersPage = (): JSX.Element => {
   const theme = useTheme()
-  const [openModal, setOpenModal] = useState(false)
-
   const [searchText, setSearchText] = useState<string>('')
-  const fuse = useMemo(
-    () => new Fuse(suppliersData, fuseOptions),
-    []
-  )
-  const filteredSuppliers: Supplier[] = useMemo(() => {
-    if (searchText.length < 2) {
-      return suppliersData
+  const [openModal, setOpenModal] = useState(false)
+  const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([])
+  const [loading, error, suppliersData] = useAxios<Supplier[]>('/suppliers/get_all', 'GET', {})
+
+  useEffect(() => {
+    if (suppliersData) {
+      if (searchText.length < 2) {
+        setFilteredSuppliers(suppliersData);
+      } else {
+        const fuse = new Fuse(suppliersData, fuseOptions);
+        const results = fuse.search(searchText).map((result) => result.item);
+        setFilteredSuppliers(results);
+      }
     }
-    return fuse.search(searchText).map((el) => el.item)
-  }, [searchText, fuse])
+  }, [searchText, suppliersData]);
+
   const tableSuppliers: CustomTableRow[] = useMemo(() => {
     return filteredSuppliers.map((supplier) => ({
       data: {
-        name: {
+        fantasyName: {
           type: CustomTableRowDataType.TEXT,
-          text: supplier.name
+          text: supplier.fantasyName
+        },
+        businessName: {
+          type: CustomTableRowDataType.TEXT,
+          text: supplier.businessName
         },
         contactName: {
           type: CustomTableRowDataType.TEXT,
           text: supplier.contactName
         },
-        category: {
+        rut: {
           type: CustomTableRowDataType.TEXT,
-          text: supplier.category
+          text: supplier.rut
         },
         phone: {
           type: CustomTableRowDataType.TEXT,
@@ -104,14 +101,11 @@ const SuppliersPage = (): JSX.Element => {
         email: {
           type: CustomTableRowDataType.TEXT,
           text: supplier.email
-        },
-        address: {
-          type: CustomTableRowDataType.TEXT,
-          text: `${supplier.address}, ${supplier.commune}`
         }
       }
     }))
   }, [filteredSuppliers])
+
   return (
     <>
       <Box
@@ -130,7 +124,7 @@ const SuppliersPage = (): JSX.Element => {
             placeholder={'Buscar por proveedor o categoría'}
           />
           <CustomTable
-            columns={inventoryCols}
+            columns={suppliersCols}
             data={tableSuppliers}
             sortable={tableSort}
           />
