@@ -4,7 +4,8 @@ import * as React from 'react'
 import CssBaseline from '@mui/material/CssBaseline'
 import { createTheme, ThemeProvider, type ThemeOptions } from '@mui/material/styles'
 import { Roboto } from 'next/font/google'
-import { NextAppDirEmotionCacheProvider } from './EmotionCache'
+import createCache from '@emotion/cache'
+import { CacheProvider } from '@emotion/react'
 
 const roboto = Roboto({
   weight: ['300', '400', '500', '700'],
@@ -35,6 +36,7 @@ const themeOptions: ThemeOptions = {
 }
 
 export const theme = createTheme(themeOptions)
+export const cache = createCache({ key: 'css' })
 
 export default function ThemeRegistry ({
   children
@@ -42,11 +44,11 @@ export default function ThemeRegistry ({
   children: React.ReactNode
 }): JSX.Element {
   return (
-    <NextAppDirEmotionCacheProvider options={{ key: 'css', prepend: true }}>
+    <CacheProvider value={cache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         {children}
       </ThemeProvider>
-    </NextAppDirEmotionCacheProvider>
+    </CacheProvider>
   )
 }

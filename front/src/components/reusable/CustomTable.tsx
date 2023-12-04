@@ -155,8 +155,8 @@ export const CustomTable: React.FC<CustomTableProps> = ({
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     display: '-webkit-box',
-                    '-webkit-line-clamp': 1,
-                    '-webkit-box-orient': 'vertical',
+                    'WebkitLineClamp': 1,
+                    'WebkitBoxOrient': 'vertical',
                     margin: 0,
                     padding: 0
                   }

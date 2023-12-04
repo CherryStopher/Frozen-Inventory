@@ -1,19 +1,36 @@
 from fastapi import APIRouter, Depends, HTTPException
 from db.database import get_db
 from sqlalchemy.orm import Session
-from models import Product
+from models import Product, Supplier
 import schemas
 from . import utils
 
 
-router = APIRouter(prefix="/product", tags=["Products"])
+router = APIRouter(prefix="/products", tags=["Products"])
 
 
-@router.get("/get_all")
+@router.get("/inventory")
 async def get_products(db: Session = Depends(get_db)):
     try:
-        data = utils.get_all_data(Product, db)
-        return data
+        products = db.query(Product, Supplier.business_name).join(Supplier).all()
+        response = []
+        for product, supplier_name in products:
+            response.append(
+                {
+                    "id": product.id,
+                    "name": product.name,
+                    "unit": f"{product.measurement_unit_quantity} {product.measurement_unit}",
+                    "available": 0,
+                    "supplier": supplier_name,
+                    "category": product.category,
+                    "average_cost": 0,
+                    "suggested_price": 0,
+                    "current_price": 0,
+                }
+            )
+
+        return response
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -21,8 +38,8 @@ async def get_products(db: Session = Depends(get_db)):
 @router.get("/get/{id}")
 async def get_product_by_id(id: int, db: Session = Depends(get_db)):
     try:
-        data = utils.get_data_by_id(Product, db, id)
-        return data
+        product = db.query(Product).filter(Product.id == id).first()
+        return product
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -22,7 +22,7 @@ depends_on: Union[str, Sequence[str], None] = None
 clients = sa.table(
     "clients",
     sa.Column("rut", sa.String(200), nullable=False),
-    sa.Column("business_name", sa.String(200), nullable=False),
+    sa.Column("name", sa.String(200), nullable=False),
     sa.Column("nickname", sa.String(200), nullable=False),
     sa.Column("phone", sa.String(200), nullable=False),
     sa.Column("email", sa.String(200), nullable=False),
@@ -32,7 +32,9 @@ clients = sa.table(
 
 
 def upgrade() -> None:
-    clients_data = json.load(open("migrations/seeds/clients.json"))
+    clients_data = json.load(
+        open("migrations/seeds/clients.json", encoding="utf-8-sig")
+    )
     op.bulk_insert(clients, clients_data)
 
 

@@ -2,9 +2,8 @@ from pydantic import BaseModel
 
 
 class Client(BaseModel):
-    fantasy_name: str
+    name: str
     rut: str
-    business_name: str
     nickname: str
     phone: str
     email: str
